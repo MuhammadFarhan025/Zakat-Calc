@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pakistan Zakat Calculator 2026</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eceff1; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        h2 { color: #1b5e20; text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #666; font-size: 0.9em; margin-bottom: 20px; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; color: #333; }
+        input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; box-sizing: border-box; transition: 0.3s; }
+        input:focus { border-color: #2e7d32; outline: none; }
+        button { width: 100%; background: #2e7d32; color: white; border: none; padding: 15px; margin-top: 25px; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; }
+        button:hover { background: #1b5e20; }
+        #result { margin-top: 20px; padding: 20px; border-radius: 8px; display: none; text-align: center; line-height: 1.6; }
+        .is-fard { background: #e8f5e9; color: #2e7d32; border: 2px solid #2e7d32; }
+        .not-fard { background: #ffebee; color: #c62828; border: 2px solid #c62828; }
+        .rate-box { font-size: 0.8em; color: #7f8c8d; background: #f9f9f9; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Zakat Checker Pakistan</h2>
+    <p class="subtitle">May 2026 Market Rates</p>
+
+    <div class="rate-box">
+        Today's Rates: <br>
+        Gold: Rs. 492,000/Tola | Silver: Rs. 9,000/Tola
+    </div>
+    
+    <label>Gold Owned (in Tolas)</label>
+    <input type="number" id="goldTola" placeholder="e.g. 2">
+
+    <label>Silver Owned (in Tolas)</label>
+    <input type="number" id="silverTola" placeholder="e.g. 10">
+
+    <label>Total Cash (PKR)</label>
+    <input type="number" id="cash" placeholder="e.g. 500000">
+
+    <label>Business Assets / Stock (PKR)</label>
+    <input type="number" id="assets" placeholder="0">
+
+    <label>Debts / Liabilities (PKR)</label>
+    <input type="number" id="debts" placeholder="0">
+
+    <button onclick="calculateZakat()">Check Zakat Status</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    function calculateZakat() {
+        // Current 2026 Rates in PKR
+        const goldRate = 492000; 
+        const silverRate = 9000;
+        const nisabThreshold = 52.5 * silverRate; // 52.5 Tola Silver is the standard Nisab
+
+        // Inputs
+        const goldTola = parseFloat(document.getElementById('goldTola').value) || 0;
+        const silverTola = parseFloat(document.getElementById('silverTola').value) || 0;
+        const cash = parseFloat(document.getElementById('cash').value) || 0;
+        const assets = parseFloat(document.getElementById('assets').value) || 0;
+        const debts = parseFloat(document.getElementById('debts').value) || 0;
+
+        // Conversion
+        const totalWealth = (goldTola * goldRate) + (silverTola * silverRate) + cash + assets;
+        const netWealth = totalWealth - debts;
+
+        const resultDiv = document.getElementById('result');
+        resultDiv.style.display = 'block';
+
+        if (netWealth >= nisabThreshold) {
+            resultDiv.className = 'is-fard';
+            const zakatAmount = netWealth * 0.025;
+            resultDiv.innerHTML = `
+                <strong>ALHAMDULILLAH</strong><br>
+                Zakat is <strong>FARD</strong> on you.<br>
+                Net Wealth: Rs. ${netWealth.toLocaleString()}<br>
+                Zakat Due (2.5%): <strong>Rs. ${zakatAmount.toLocaleString()}</strong>
+            `;
+        } else {
+            resultDiv.className = 'not-fard';
+            resultDiv.innerHTML = `
+                <strong>Zakat is NOT Fard</strong><br>
+                Your wealth is below the Nisab (Rs. ${nisabThreshold.toLocaleString()}).<br>
+                You need Rs. ${(nisabThreshold - netWealth).toLocaleString()} more to reach Nisab.
+            `;
+        }
+    }
+</script>
+
+</body>
+</html>
